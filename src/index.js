@@ -13,10 +13,33 @@ function initialize(){
             let movieTitle = moviePage.querySelector('#title')
             let movieYear = moviePage.querySelector('#year-released')
             let movieDescription = moviePage.querySelector('#description')
+            let watchButton = document.querySelector('#watched')
             movieImage.src = film.image
             movieTitle.textContent = film.title
             movieYear.textContent = film.release_year
-            movieDescription.textContent = film.description 
+            movieDescription.textContent = film.description
+            film.watched == true ? (watchButton.textContent = 'Unwatched') : (watchButton.textContent = 'Watched')  
+            watchButton.addEventListener('click',(e)=>{
+                if(watchButton.textContent === "Watched" ) {
+                    watchButton.textContent = 'Unwatched'
+                    fetch (`http://localhost:3000/movies/${film.id}`,{
+                        method: 'PATCH',
+                        headers:{
+                            'content-type': 'application/json',
+                        },
+                        body: JSON.stringify({'watched': true})
+                    })
+                } else {
+                    watchButton.textContent = 'Watched'
+                    fetch (`http://localhost:3000/movies/${film.id}`,{
+                        method: 'PATCH',
+                        headers:{
+                            'content-type': 'application/json',
+                        },
+                        body: JSON.stringify({'watched': false})
+                    })
+                }
+            })
         })
     }))
     fetch ('http://localhost:3000/movies/1')
